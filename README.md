@@ -1,3 +1,9 @@
+# zi2zi (DOUBLE forked):Style-transformation from hand-written characters to Chinese Calligraphy, Using CNN + CycleGAN
+
+主要工作：基于上一位coder的模型进行改进，将原文提及的cycleGAN引入模型中GAN的部分，并同时对各loss做出删改。
+
+
+
 # zi2zi (forked): Master Chinese Calligraphy with Conditional Adversarial Networks
 
 ## Major Updates from Original repo:
