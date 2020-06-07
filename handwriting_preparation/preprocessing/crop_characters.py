@@ -15,12 +15,13 @@ def char_img_iter(image_path, box_path):
         lines = [x.decode('utf8').strip() for x in f.readlines()]
         for line in lines:
             if n >= 156 and "yun.jpg" in image_path: break  # custom rules, so that you don't have fix all the box results
-
-            ch, x1, y1, x2, y2, _ = line.rstrip().split(' ')
-            x1 = int(x1)
-            y1 = int(y1)
-            x2 = int(x2)
-            y2 = int(y2)
+            print(line.split(' '))
+            charset = line.split(' ')
+            ch = charset[0]
+            x1 = int(charset[1])
+            y1 = int(charset[2])
+            x2 = int(charset[3])
+            y2 = int(charset[4])
 
             # Crop the character based on Box result
             char_img = img.crop((x1, img.size[1] - y2, x2, img.size[1] - y1))

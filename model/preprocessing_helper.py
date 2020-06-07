@@ -1,6 +1,6 @@
 import os
 import pdb
-
+import math
 import PIL
 import numpy as np
 from PIL import Image, ImageFont
@@ -37,7 +37,7 @@ def draw_single_char(img, canvas_size, char_size):
     if height / factor > char_size + 5:  # CANVAS_SIZE/CHAR_SIZE is a benchmark, height should be less
         factor = height * 1.0 / char_size
 
-    img = img.resize((int(width / factor), int(height / factor)), resample=PIL.Image.LANCZOS)
+    img = img.resize((int(math.ceil(width / factor)), int(math.ceil(height / factor))), resample=PIL.Image.LANCZOS)
 
     bg_img = Image.new("L", (canvas_size, canvas_size), 255)
     offset = ((canvas_size - img.size[0]) // 2, (canvas_size - img.size[1]) // 2)
