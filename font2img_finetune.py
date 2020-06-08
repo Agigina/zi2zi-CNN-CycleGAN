@@ -8,7 +8,7 @@ from model.preprocessing_helper import CHAR_SIZE, CANVAS_SIZE, draw_example_src_
 from package import save_train_valid_data
 
 parser = argparse.ArgumentParser(description='Convert font to images')
-parser.add_argument('--src_font', default="data/raw_fonts/SimSun.ttf", help='path of the source font')
+parser.add_argument('--src_font', default="data/raw_fonts/迷你简黄草.ttf", help='path of the source font')
 parser.add_argument('--image_basename_path',
                     default="handwriting_preparation/images/yun",
                     help='path of the handwritten image (box file should be in the same folders)')

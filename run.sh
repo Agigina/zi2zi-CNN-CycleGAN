@@ -1,7 +1,7 @@
 ##########################
 ## PreProcess
 ##########################
-
+'''
 # Sample draw the fonts and save to paired_images, about 10-20 mins
 PYTHONPATH=. python font2img.py
 
@@ -34,7 +34,7 @@ PYTHONPATH=. python infer.py --model_dir=experiments/checkpoint/experiment_0_bat
 
 # Generate paired images for finetune
 PYTHONPATH=. python font2img_finetune.py
-
+'''
 
 # Train/Finetune the model
 PYTHONPATH=. python train.py --experiment_dir=experiments_finetune \
