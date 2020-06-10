@@ -37,7 +37,7 @@
 
 
 # Train/Finetune the model
-# python train.py --experiment_dir=experiments_finetune --experiment_id=0 --batch_size=16 --lr=0.001 --epoch=10 --sample_steps=1 --schedule=20 --L1_penalty=100 --Lconst_penalty=15 --freeze_encoder_decoder=1 --optimizer=sgd --fine_tune=67 --flip_labels=1
+python train.py --experiment_dir=experiments_finetune --experiment_id=0 --batch_size=16 --lr=0.001 --epoch=10 --sample_steps=1 --schedule=20 --L1_penalty=100 --Lconst_penalty=15 --freeze_encoder_decoder=1 --optimizer=sgd --fine_tune=67 --flip_labels=1
 
 PYTHONPATH=. python train.py --experiment_dir=experiments_finetune \
                 --experiment_id=0 \
@@ -53,15 +53,15 @@ PYTHONPATH=. python train.py --experiment_dir=experiments_finetune \
                 --fine_tune=67 \
                 --flip_labels=1
 
-# PYTHONPATH=. python infer.py --model_dir=experiments_finetune/checkpoint/experiment_0 \
-#                 --batch_size=32 \
-#                 --source_obj=experiments_finetune/data/val.obj \
-#                 --embedding_id=67 \
-#                 --save_dir=save_dir/
+PYTHONPATH=. python infer.py --model_dir=experiments_finetune/checkpoint/experiment_0 \
+                --batch_size=32 \
+                --source_obj=experiments_finetune/data/val.obj \
+                --embedding_id=67 \
+                --save_dir=save_dir/
 
 
 
-# PYTHONPATH=. python infer_by_text.py --model_dir=experiments_finetune/checkpoint/experiment_0 \
-#                 --batch_size=32 \
-#                 --embedding_id=67 \
-#                 --save_dir=save_dir/
+PYTHONPATH=. python infer_by_text.py --model_dir=experiments_finetune/checkpoint/experiment_0 \
+                --batch_size=32 \
+                --embedding_id=67 \
+                --save_dir=save_dir/
