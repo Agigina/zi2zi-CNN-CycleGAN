@@ -346,6 +346,7 @@ class UNet(object):
 
         if not os.path.exists(model_dir):
             os.makedirs(model_dir)
+            print("@@@makdir model_ckpt@@@")
 
         saver.save(self.sess, os.path.join(model_dir, model_name), global_step=step)
 
