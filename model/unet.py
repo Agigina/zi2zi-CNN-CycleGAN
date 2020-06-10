@@ -174,10 +174,10 @@ class UNet(object):
                                         name='no_target_A_and_B_images')
         no_target_ids = tf.placeholder(tf.int64, shape=None, name="no_target_embedding_ids")
 
-        # target images
-        real_B = real_data[:, :, :, :self.input_filters]
         # source images
-        real_A = real_data[:, :, :, self.input_filters:self.input_filters + self.output_filters]
+        real_A = real_data[:, :, :, :self.input_filters]
+        # target images
+        real_B = real_data[:, :, :, self.input_filters:self.input_filters + self.output_filters]
 
         embedding = init_embedding(self.embedding_num, self.embedding_dim)
         fake_B, encoded_real_A = self.generator(real_A, embedding, embedding_ids, is_training=is_training,
