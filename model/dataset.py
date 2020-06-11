@@ -74,6 +74,7 @@ def get_batch_iter(examples, batch_size, augment, embedding_id=None):
     def batch_iter_with_filter():
         labels, processed = [], []
         for i in range(len(examples)):
+            print("@@@@@%d", examples[i][0])
             if examples[i][0] == embedding_id:
                 labels.append(embedding_id)
                 processed.append(process(examples[i][1]))

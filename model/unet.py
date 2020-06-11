@@ -442,6 +442,7 @@ class UNet(object):
 
         if isinstance(embedding_ids, int) or len(embedding_ids) == 1:
             embedding_id = embedding_ids if isinstance(embedding_ids, int) else embedding_ids[0]
+            print("========Begin infer!========")
             source_iter = source_provider.get_single_embedding_iter(self.batch_size, embedding_id)
         else:
             source_iter = source_provider.get_random_embedding_iter(self.batch_size, embedding_ids)
@@ -464,6 +465,7 @@ class UNet(object):
             count += 1
         if batch_buffer:
             # last batch
+            print("######infer count=  %d",count)
             save_imgs(batch_buffer, count, save_dir)
 
     def load_model(self, model_dir):
