@@ -7,6 +7,7 @@ from io import BytesIO
 import imageio
 import numpy as np
 import scipy.misc as misc
+from PIL import Image
 
 
 def pad_seq(seq, batch_size):
@@ -42,7 +43,8 @@ def read_split_image(img):
 
 def shift_and_resize_image(img, shift_x, shift_y, nw, nh):
     w, h = img.shape
-    enlarged = misc.imresize(img, [nw, nh])
+    # enlarged = misc.imresize(img, [nw, nh])
+    enlarged = np.array(Image.fromarray(img).resize(size=(nw, nh)))
     return enlarged[shift_x:shift_x + w, shift_y:shift_y + h]
 
 
