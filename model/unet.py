@@ -343,7 +343,7 @@ class UNet(object):
     def checkpoint(self, saver, step):
         model_name = "unet.model"
         model_id, model_dir = self.get_model_id_and_dir()
-
+        print("!!!!!!model_dir="+model_dir)
         if not os.path.exists(model_dir):
             os.makedirs(model_dir)
             print("@@@makdir model_ckpt@@@")
