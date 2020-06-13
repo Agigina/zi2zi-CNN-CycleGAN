@@ -84,7 +84,7 @@ def font2img(src, dst, charset, char_size, canvas_size,
 
 load_global_charset()
 parser = argparse.ArgumentParser(description='Convert font to images')
-parser.add_argument('--src_font', default='data/raw_fonts/SimSun.ttf', help='path of the source font')
+parser.add_argument('--src_font', default='data/raw_fonts/迷你简黄草.ttf', help='path of the source font')
 parser.add_argument('--fonts_dir', default='data/raw_fonts', help='dir path of the target fonts')
 parser.add_argument('--filter', type=int, default=1, help='filter recurring characters')
 parser.add_argument('--charset', type=str, default='CN',
