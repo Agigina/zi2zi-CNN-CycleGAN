@@ -5,6 +5,7 @@ from collections import namedtuple
 import numpy as np
 import tensorflow as tf
 from scipy import misc
+import imageio
 
 from model.preprocessing_helper import save_imgs
 from .dataset import TrainDataProvider, InjectDataProvider
@@ -338,6 +339,7 @@ class UNet(object):
     def get_model_id_and_dir(self):
         model_id = "experiment_%d" % self.experiment_id
         model_dir = os.path.join(self.checkpoint_dir, model_id)
+        print("model_dir="+model_dir)
         return model_id, model_dir
 
     def checkpoint(self, saver, step):
@@ -406,7 +408,7 @@ class UNet(object):
             os.makedirs(model_sample_dir)
 
         sample_img_path = os.path.join(model_sample_dir, "sample_%02d_%04d.png" % (epoch, step))
-        misc.imsave(sample_img_path, merged_pair)
+        imageio.imwrite(sample_img_path, merged_pair)
 
     def validate_model(self, val_iter, step, test_writer):
         print("Validating model..")
@@ -608,9 +610,11 @@ class UNet(object):
                 current_lr = update_lr
 
             for bid, batch in enumerate(train_batch_iter):
+                print("run into range")
                 counter += 1
                 labels, batch_images = batch
                 shuffled_ids = labels[:]
+                print(shuffled_ids)
                 if flip_labels:
                     np.random.shuffle(shuffled_ids)
                 # Optimize D
@@ -623,6 +627,7 @@ class UNet(object):
                                                                no_target_data: batch_images,
                                                                no_target_ids: shuffled_ids
                                                            })
+                print("achiec here")
                 # Optimize G
                 _, batch_g_loss = self.sess.run([g_optimizer, loss_handle.g_loss],
                                                 feed_dict={
@@ -670,5 +675,6 @@ class UNet(object):
                     print("Checkpoint: save checkpoint step %d" % counter)
                     self.checkpoint(saver, counter)
         # save the last checkpoint
+        print("to save the last checkpoint")
         print("Checkpoint: last checkpoint step %d" % counter)
         self.checkpoint(saver, counter)

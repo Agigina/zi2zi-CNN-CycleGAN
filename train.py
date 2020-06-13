@@ -58,6 +58,7 @@ args = parser.parse_args()
 def main(_):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.9
 
     with tf.Session(config=config) as sess:
         model = UNet(args.experiment_dir, batch_size=args.batch_size, experiment_id=args.experiment_id,
@@ -83,8 +84,8 @@ def main(_):
                     flip_labels=args.flip_labels, optimizer=args.optimizer)
         
 
-        latest_ckp = tf.train.latest_checkpoint('./')
-        print_tensors_in_checkpoint_file(latest_ckp, all_tensors=True, tensor_name='')
+        # latest_ckp = tf.train.latest_checkpoint('./')
+        # print_tensors_in_checkpoint_file(latest_ckp, all_tensors=True, tensor_name='')
 
 
 if __name__ == '__main__':

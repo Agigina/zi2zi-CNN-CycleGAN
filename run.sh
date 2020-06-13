@@ -37,21 +37,21 @@
 
 
 # Train/Finetune the model
-# python train.py --experiment_dir=experiments_finetune --experiment_id=0 --batch_size=16 --lr=0.001 --epoch=10 --sample_steps=1 --schedule=20 --L1_penalty=100 --Lconst_penalty=15 --freeze_encoder_decoder=1 --optimizer=sgd  --flip_labels=1
 
-# PYTHONPATH=. python train.py --experiment_dir=experiments_finetune \
-#                 --experiment_id=0 \
-#                 --batch_size=16 \
-#                 --lr=0.001 \
-#                 --epoch=10 \
-#                 --sample_steps=1 \
-#                 --schedule=20 \
-#                 --L1_penalty=100 \
-#                 --Lconst_penalty=15 \
-#                 --freeze_encoder_decoder=1 \
-#                 --optimizer=sgd \
-#                 --fine_tune=67 \
-#                 --flip_labels=1
+PYTHONPATH=. python train.py --experiment_dir=experiments_finetune \
+                --experiment_id=0 \
+                --batch_size=16 \
+                --lr=0.001 \
+                --epoch=10 \
+                --sample_steps=1 \
+                --schedule=20 \
+                --L1_penalty=100 \
+                --Lconst_penalty=15 \
+                --freeze_encoder_decoder=1 \
+                --optimizer=sgd \
+                --fine_tune=67 \
+                --flip_labels=1
+# python train.py --experiment_dir=experiments_finetune --experiment_id=1 --batch_size=16 --lr=0.001 --epoch=10 --sample_steps=1 --schedule=20 --L1_penalty=100 --Lconst_penalty=15 --freeze_encoder_decoder=1 --optimizer=sgd  --flip_labels=1
 
 PYTHONPATH=. python infer.py --model_dir=experiments_finetune/checkpoint/experiment_0 \
                 --batch_size=32 \
@@ -65,7 +65,7 @@ PYTHONPATH=. python infer.py --model_dir=experiments_finetune/checkpoint/experim
 
 PYTHONPATH=. python infer_by_text.py --model_dir=experiments_finetune/checkpoint/experiment_0 \
                 --batch_size=32 \
-                --embedding_id=67 \
+                --embedding_id=136 \
                 --save_dir=save_dir/
 
-# python infer_by_text.py --model_dir=experiments_finetune/checkpoint/experiment_0 --batch_size=32 --embedding_id=67 --save_dir=save_dir/
+# python infer_by_text.py --model_dir=experiments_finetune/checkpoint/experiment_0 --batch_size=32 --embedding_id=136 --save_dir=save_dir/
