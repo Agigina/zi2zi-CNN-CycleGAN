@@ -26,13 +26,13 @@ parser.add_argument('--model_dir', dest='model_dir', default="experiments/checkp
                     help='directory that saves the model checkpoints')
 parser.add_argument('--batch_size', dest='batch_size', type=int, default=16, help='number of examples in batch')
 parser.add_argument('--text', type=str, default="人生是条马尔可夫链", help='the source images for inference')
-parser.add_argument('--embedding_id', type=int, default=67, help='embeddings involved')
+parser.add_argument('--embedding_id', type=int, default=136, help='embeddings involved')
 parser.add_argument('--embedding_dim', type=int, default=EMBEDDING_DIM, help="dimension for embedding")
 parser.add_argument('--save_dir', default='save_dir', type=str, help='path to save inferred images')
 parser.add_argument('--inst_norm', dest='inst_norm', type=int, default=1,
                     help='use conditional instance normalization in your model')
 parser.add_argument('--char_size', dest='char_size', type=int, default=CHAR_SIZE, help='character size')
-parser.add_argument('--src_font', dest='src_font', default='data/raw_fonts/SimSun.ttf', help='path of the source font')
+parser.add_argument('--src_font', dest='src_font', default='data/raw_fonts/迷你简黄草.ttf', help='path of the source font')
 parser.add_argument('--canvas_size', dest='canvas_size', type=int, default=CANVAS_SIZE, help='canvas size')
 
 args = parser.parse_args()
