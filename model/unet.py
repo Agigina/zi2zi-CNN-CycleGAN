@@ -6,6 +6,7 @@ import numpy as np
 import tensorflow as tf
 from scipy import misc
 import imageio
+from PIL import Image
 
 from model.preprocessing_helper import save_imgs
 from .dataset import TrainDataProvider, InjectDataProvider
@@ -455,9 +456,19 @@ class UNet(object):
         batch_buffer = list()
         for labels, source_imgs in source_iter:
             fake_imgs, real_imgs, d_loss, g_loss, l1_loss = self.generate_fake_samples(source_imgs, labels)
+            # print(fake_imgs.shape)
+            # img_data = tf.image.decode_jpeg(source_imgs, channels=2) #解码
+            #img_data = sess.run(tf.image.decode_jpeg(img, channels=3))
+            # print(source_imgs.shape)
 
-            merged_fake_images = merge(scale_back(fake_imgs), [self.batch_size, 1])
-            merged_real_images = merge(scale_back(real_imgs), [self.batch_size, 1])
+            merged_fake_images = merge(scale_back(fake_imgs), [self.batch_size, 1])    
+            merged_real_images = merge(scale_back(real_imgs), [self.batch_size, 1])    
+            # img_data = source_imgs.reshape(10,256,256,1)
+            # img_data = self.sess.run(tf.image.grayscale_to_rgb(source_imgs)) #灰度化
+            # img_data = (source_imgs[:,:,:,0]+source_imgs[:,:,:,1])/2 
+            # img_data = tf.reshape(img_data, [10,256,256,1])
+            # print(img_data.shape)   
+            # merged_source_images = merge(scale_back(img_data), [self.batch_size, 1])
             merged_pair = np.concatenate([merged_real_images, merged_fake_images], axis=1)
 
             batch_buffer.append(merged_pair)
@@ -467,7 +478,7 @@ class UNet(object):
             count += 1
         if batch_buffer:
             # last batch
-            print("######infer count=  %d",count)
+            print("=======infer count = " , count)
             save_imgs(batch_buffer, count, save_dir)
 
     def load_model(self, model_dir):
