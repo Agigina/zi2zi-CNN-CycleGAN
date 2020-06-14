@@ -5,6 +5,8 @@ from collections import namedtuple
 import numpy as np
 import tensorflow as tf
 from scipy import misc
+import imageio
+from PIL import Image
 
 from model.preprocessing_helper import save_imgs
 from .dataset import TrainDataProvider, InjectDataProvider
@@ -23,7 +25,7 @@ SummaryHandle = namedtuple("SummaryHandle", ["d_merged", "g_merged"])
 class UNet(object):
     def __init__(self, experiment_dir=None, experiment_id=0, batch_size=32, input_width=128, output_width=128,
                  generator_dim=64, discriminator_dim=64, L1_penalty=100, Lconst_penalty=15, Ltv_penalty=0.0,
-                 Lcategory_penalty=1.0, embedding_num=40, embedding_dim=64, input_filters=1, output_filters=1,
+                 Lcategory_penalty=1.0, embedding_num=40, embedding_dim=128, input_filters=1, output_filters=1,
                  validate_batches=2):
         self.experiment_dir = experiment_dir
         self.experiment_id = experiment_id
@@ -338,12 +340,13 @@ class UNet(object):
     def get_model_id_and_dir(self):
         model_id = "experiment_%d" % self.experiment_id
         model_dir = os.path.join(self.checkpoint_dir, model_id)
+        print("model_dir="+model_dir)
         return model_id, model_dir
 
     def checkpoint(self, saver, step):
         model_name = "unet.model"
         model_id, model_dir = self.get_model_id_and_dir()
-
+        print("!!!!!!model_dir="+model_dir)
         if not os.path.exists(model_dir):
             os.makedirs(model_dir)
             print("@@@makdir model_ckpt@@@")
@@ -406,7 +409,7 @@ class UNet(object):
             os.makedirs(model_sample_dir)
 
         sample_img_path = os.path.join(model_sample_dir, "sample_%02d_%04d.png" % (epoch, step))
-        misc.imsave(sample_img_path, merged_pair)
+        imageio.imwrite(sample_img_path, merged_pair)
 
     def validate_model(self, val_iter, step, test_writer):
         print("Validating model..")
@@ -442,6 +445,7 @@ class UNet(object):
 
         if isinstance(embedding_ids, int) or len(embedding_ids) == 1:
             embedding_id = embedding_ids if isinstance(embedding_ids, int) else embedding_ids[0]
+            print("========Begin infer!========")
             source_iter = source_provider.get_single_embedding_iter(self.batch_size, embedding_id)
         else:
             source_iter = source_provider.get_random_embedding_iter(self.batch_size, embedding_ids)
@@ -452,9 +456,19 @@ class UNet(object):
         batch_buffer = list()
         for labels, source_imgs in source_iter:
             fake_imgs, real_imgs, d_loss, g_loss, l1_loss = self.generate_fake_samples(source_imgs, labels)
+            # print(fake_imgs.shape)
+            # img_data = tf.image.decode_jpeg(source_imgs, channels=2) #解码
+            #img_data = sess.run(tf.image.decode_jpeg(img, channels=3))
+            # print(source_imgs.shape)
 
-            merged_fake_images = merge(scale_back(fake_imgs), [self.batch_size, 1])
-            merged_real_images = merge(scale_back(real_imgs), [self.batch_size, 1])
+            merged_fake_images = merge(scale_back(fake_imgs), [self.batch_size, 1])    
+            merged_real_images = merge(scale_back(real_imgs), [self.batch_size, 1])    
+            # img_data = source_imgs.reshape(10,256,256,1)
+            # img_data = self.sess.run(tf.image.grayscale_to_rgb(source_imgs)) #灰度化
+            # img_data = (source_imgs[:,:,:,0]+source_imgs[:,:,:,1])/2 
+            # img_data = tf.reshape(img_data, [10,256,256,1])
+            # print(img_data.shape)   
+            # merged_source_images = merge(scale_back(img_data), [self.batch_size, 1])
             merged_pair = np.concatenate([merged_real_images, merged_fake_images], axis=1)
 
             batch_buffer.append(merged_pair)
@@ -464,6 +478,7 @@ class UNet(object):
             count += 1
         if batch_buffer:
             # last batch
+            print("=======infer count = " , count)
             save_imgs(batch_buffer, count, save_dir)
 
     def load_model(self, model_dir):
@@ -606,9 +621,11 @@ class UNet(object):
                 current_lr = update_lr
 
             for bid, batch in enumerate(train_batch_iter):
+                print("run into range")
                 counter += 1
                 labels, batch_images = batch
                 shuffled_ids = labels[:]
+                print(shuffled_ids)
                 if flip_labels:
                     np.random.shuffle(shuffled_ids)
                 # Optimize D
@@ -621,6 +638,7 @@ class UNet(object):
                                                                no_target_data: batch_images,
                                                                no_target_ids: shuffled_ids
                                                            })
+                print("achiec here")
                 # Optimize G
                 _, batch_g_loss = self.sess.run([g_optimizer, loss_handle.g_loss],
                                                 feed_dict={
@@ -668,5 +686,6 @@ class UNet(object):
                     print("Checkpoint: save checkpoint step %d" % counter)
                     self.checkpoint(saver, counter)
         # save the last checkpoint
+        print("to save the last checkpoint")
         print("Checkpoint: last checkpoint step %d" % counter)
         self.checkpoint(saver, counter)

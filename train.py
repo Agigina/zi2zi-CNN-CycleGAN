@@ -9,6 +9,9 @@ import tensorflow as tf
 from model.preprocessing_helper import CANVAS_SIZE, EMBEDDING_DIM
 from model.unet import UNet
 
+import tensorflow as tf
+from tensorflow.python.tools.inspect_checkpoint import print_tensors_in_checkpoint_file
+
 parser = argparse.ArgumentParser(description='Train')
 parser.add_argument('--experiment_dir', required=True,
                     help='experiment directory, data, samples,checkpoints,etc')
@@ -21,7 +24,7 @@ parser.add_argument('--Lconst_penalty', type=int, default=15, help='weight for c
 parser.add_argument('--Ltv_penalty', type=float, default=0.0, help='weight for tv loss')
 parser.add_argument('--Lcategory_penalty', type=float, default=1.0,
                     help='weight for category loss')
-parser.add_argument('--embedding_num', type=int, default=185,
+parser.add_argument('--embedding_num', type=int, default=40,
                     help="number for distinct embeddings")
 parser.add_argument('--embedding_dim', type=int, default=EMBEDDING_DIM, help="dimension for embedding")
 parser.add_argument('--epoch', type=int, default=100, help='number of epoch')
@@ -55,6 +58,7 @@ args = parser.parse_args()
 def main(_):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
+    config.gpu_options.per_process_gpu_memory_fraction = 0.9
 
     with tf.Session(config=config) as sess:
         model = UNet(args.experiment_dir, batch_size=args.batch_size, experiment_id=args.experiment_id,
@@ -78,6 +82,10 @@ def main(_):
                     sample_steps=args.sample_steps, checkpoint_steps=args.checkpoint_steps,
                     validate_steps=args.validate_steps,
                     flip_labels=args.flip_labels, optimizer=args.optimizer)
+        
+
+        # latest_ckp = tf.train.latest_checkpoint('./')
+        # print_tensors_in_checkpoint_file(latest_ckp, all_tensors=True, tensor_name='')
 
 
 if __name__ == '__main__':
